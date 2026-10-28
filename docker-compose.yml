@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: pve-manager-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      - ADMIN_USER=admin
+      - ADMIN_PASS=proxmox2026
+      - DB_URL=sqlite:///./data/pve_manager.db
+
+  frontend:
+    build: ./frontend
+    container_name: pve-manager-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
